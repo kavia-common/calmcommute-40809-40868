@@ -7,3 +7,4 @@ export * from "./ui/Card";
 export * from "./ui/Toggle";
 export * from "./ui/Badge";
 export * from "@/lib/publicConfig";
+export * from "./ConnectMusicCard";

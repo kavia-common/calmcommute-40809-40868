@@ -3,6 +3,7 @@
 import { Card } from "@/components/ui/Card";
 import { Toggle } from "@/components/ui/Toggle";
 import { Button } from "@/components/ui/Button";
+import { ConnectMusicCard } from "@/components";
 
 /**
  * PUBLIC_INTERFACE
@@ -26,6 +27,9 @@ export default function PreferencesPage() {
           <Toggle id="podcasts" label="Podcasts" defaultChecked />
         </div>
       </Card>
+
+      {/* Feature-flag gated; ConnectMusicCard self-hides if disabled */}
+      <ConnectMusicCard />
 
       <Card>
         <h2 className="text-lg font-semibold mb-2">Focus</h2>

@@ -41,7 +41,7 @@ export default function RootLayout({
           <MoodProvider>
             <PreferencesProvider>
               <AppAnalyticsMount />
-              <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
+              <main id="main" className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12" role="main" tabIndex={-1}>
                 {children}
               </main>
             </PreferencesProvider>

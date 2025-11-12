@@ -94,30 +94,31 @@ export function RecommendationsPanel() {
   };
 
   return (
-    <Card className="cc-card-hover">
+    <Card className="cc-card-hover" role="region" aria-labelledby="recos-heading">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-lg font-semibold">Recommendations</h2>
-        <Button variant="ghost" onClick={onRefresh} aria-label="Refresh recommendations">
+        <h2 id="recos-heading" className="text-lg font-semibold">Recommendations</h2>
+        <Button variant="ghost" onClick={onRefresh} aria-label="Refresh recommendations list">
           Refresh
         </Button>
       </div>
-      <div className="grid md:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-3 gap-4" role="list" aria-label="Recommended items">
         {items.map((it) => (
           <div
             key={it.id}
             className="cc-card p-4 cc-card-hover"
-            role="article"
-            aria-label={it.title}
+            role="listitem"
+            aria-label={`${it.type}: ${it.title}`}
           >
             <div className="ocean-surface-gradient rounded-md p-3 border border-blue-100">
-              <h3 className="font-semibold">{it.title}</h3>
-              <p className="text-sm text-slate-600 mt-1">{it.meta}</p>
+              <h3 className="font-semibold" id={`rec-${it.id}-title`}>{it.title}</h3>
+              <p className="text-sm text-slate-600 mt-1" id={`rec-${it.id}-meta`}>{it.meta}</p>
             </div>
             <div className="mt-3">
               <Button
                 variant="primary"
                 onClick={() => handleAction(it)}
-                aria-label={`${it.cta} ${it.title}`}
+                aria-labelledby={`rec-${it.id}-title`}
+                aria-describedby={`rec-${it.id}-meta`}
               >
                 {it.cta}
               </Button>
@@ -126,7 +127,7 @@ export function RecommendationsPanel() {
         ))}
       </div>
       {(cfg.LOG_LEVEL === "debug" || cfg.LOG_LEVEL === "info") && (
-        <div className="text-xs text-gray-500 mt-3">
+        <div className="text-xs text-gray-500 mt-3" aria-live="polite">
           Using API: {cfg.API_BASE || "not configured"} | WS: {cfg.WS_URL || "not configured"}
         </div>
       )}

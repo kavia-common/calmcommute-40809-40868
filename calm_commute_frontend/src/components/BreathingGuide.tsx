@@ -395,7 +395,7 @@ export const BreathingGuide: React.FC<BreathingGuideProps> = ({
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-6">
+      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-6" aria-label="Session progress">
         <div
           className="h-full rounded-full transition-all"
           style={{

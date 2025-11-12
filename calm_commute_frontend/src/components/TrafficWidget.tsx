@@ -34,16 +34,16 @@ export function TrafficWidget(props: {
     "Heavy Traffic";
 
   return (
-    <Card className="cc-card-hover">
+    <Card className="cc-card-hover" role="region" aria-labelledby="traffic-heading">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-lg font-semibold">Commute Traffic</h2>
-        <Badge className={color}>{label}</Badge>
+        <h2 id="traffic-heading" className="text-lg font-semibold">Commute Traffic</h2>
+        <Badge className={color} aria-live="polite" aria-label={`Traffic condition: ${label}`}>{label}</Badge>
       </div>
       <div className="text-sm text-slate-700">
-        Estimated time to destination: <span className="font-semibold">{etaMinutes} min</span>
+        Estimated time to destination: <span className="font-semibold" aria-live="polite">{etaMinutes} min</span>
       </div>
       {(props.showMap ?? true) && url && (
-        <div className="mt-3 overflow-hidden rounded-md border border-slate-200">
+        <div className="mt-3 overflow-hidden rounded-md border border-slate-200" role="group" aria-label="Map preview">
           <iframe
             src={url}
             title={title}

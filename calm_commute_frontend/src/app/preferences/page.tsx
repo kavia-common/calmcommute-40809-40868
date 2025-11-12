@@ -46,11 +46,11 @@ export default function PreferencesPage() {
       <h1 className="text-2xl font-semibold tracking-tight">Preferences</h1>
 
       <Card>
-        <h2 className="text-lg font-semibold mb-2">Default Music Provider</h2>
-        <p className="text-slate-600 mb-4 text-sm">
+        <h2 className="text-lg font-semibold mb-2" id="music-provider-heading">Default Music Provider</h2>
+        <p className="text-slate-600 mb-4 text-sm" id="music-provider-desc">
           Choose the provider to launch for music playback.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" role="group" aria-labelledby="music-provider-heading" aria-describedby="music-provider-desc">
           {musicProviderOptions.map((opt) => {
             const active = draft.defaultMusicProvider === opt.value;
             return (
@@ -64,11 +64,12 @@ export default function PreferencesPage() {
                 }`}
                 onClick={() => update("defaultMusicProvider", opt.value)}
                 aria-pressed={active}
+                aria-label={`Select ${opt.label} as default provider`}
               >
                 <div className="flex items-center justify-between">
                   <div className="font-semibold">{opt.label}</div>
                   {active && (
-                    <span className="cc-badge cc-badge-blue text-xs">Selected</span>
+                    <span className="cc-badge cc-badge-blue text-xs" aria-label="Selected">Selected</span>
                   )}
                 </div>
                 <div className="text-xs text-slate-600 mt-1">

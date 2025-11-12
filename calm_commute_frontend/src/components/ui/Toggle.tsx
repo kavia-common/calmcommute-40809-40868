@@ -20,7 +20,7 @@ export function Toggle({ id, label, defaultChecked, checked: controlledChecked, 
   const checked = isControlled ? controlledChecked : uncontrolled;
 
   return (
-    <label htmlFor={controlId} className="cc-toggle">
+    <label htmlFor={controlId} className="cc-toggle" aria-label={label}>
       <span
         className={`inline-flex h-5 w-9 items-center rounded-full transition ${
           checked ? "bg-blue-600" : "bg-slate-300"

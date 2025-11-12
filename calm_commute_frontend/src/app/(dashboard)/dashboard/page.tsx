@@ -47,6 +47,7 @@ export default function DashboardPage() {
               onClick={() => setShowBreathing(true)}
               className="px-4 py-2 rounded-md text-white shadow"
               style={{ background: "#2563EB" }}
+              aria-label="Launch guided breathing session"
             >
               Launch Breathing
             </button>

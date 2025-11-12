@@ -49,28 +49,30 @@ export function MoodCheckinCard() {
   };
 
   return (
-    <Card className="cc-card-hover">
+    <Card className="cc-card-hover" role="region" aria-labelledby="mood-checkin-heading">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold">How are you feeling?</h2>
+          <h2 id="mood-checkin-heading" className="text-lg font-semibold">How are you feeling?</h2>
           <p className="text-sm text-slate-600">Quick check-in before you drive.</p>
         </div>
         {last && (
-          <Badge tone={(lastTone as "blue" | "amber" | "red" | undefined)}>
+          <Badge tone={(lastTone as "blue" | "amber" | "red" | undefined)} aria-live="polite">
             Last: {new Date(last.timestamp).toLocaleString()} • {last.mood}
           </Badge>
         )}
       </div>
 
-      <div className="flex flex-wrap gap-2 mt-4">
+      <div className="flex flex-wrap gap-2 mt-4" role="group" aria-label="Select your current mood">
         {moods.map((m) => {
           const active = mood === m.key;
           return (
             <button
               key={m.key}
+              type="button"
               onClick={() => setMood(m.key)}
               className={`cc-btn ${active ? "cc-btn-primary" : "cc-btn-secondary"}`}
               aria-pressed={active}
+              aria-label={`Set mood to ${m.key}`}
             >
               {m.key}
             </button>
@@ -88,14 +90,16 @@ export function MoodCheckinCard() {
           placeholder="e.g., tough meeting ahead, traffic seems heavy"
           value={note}
           onChange={(e) => setNote(e.target.value)}
+          aria-describedby="mood-note-help"
         />
+        <p id="mood-note-help" className="sr-only">Optional note about your current context.</p>
       </div>
 
       <div className="mt-4 flex gap-2">
-        <Button variant="primary" onClick={handleSave} aria-disabled={!mood} disabled={!mood}>
+        <Button variant="primary" onClick={handleSave} aria-disabled={!mood} disabled={!mood} aria-label="Save mood check-in">
           Save Check-in
         </Button>
-        <Button variant="ghost" onClick={handleClearLocal}>
+        <Button variant="ghost" onClick={handleClearLocal} aria-label="Clear mood and note">
           Clear
         </Button>
       </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { NavBar } from "@/components/NavBar";
 import { MoodProvider } from "@/lib/store/moodStore";
+import { PreferencesProvider } from "@/lib/store/preferencesStore";
 
 export const metadata: Metadata = {
   title: "CalmCommute",
@@ -37,9 +38,11 @@ export default function RootLayout({
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-blue-500/10 via-transparent to-transparent" />
           <NavBar />
           <MoodProvider>
-            <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
-              {children}
-            </main>
+            <PreferencesProvider>
+              <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
+                {children}
+              </main>
+            </PreferencesProvider>
           </MoodProvider>
         </div>
       </body>

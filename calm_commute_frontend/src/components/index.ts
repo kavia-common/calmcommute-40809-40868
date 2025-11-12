@@ -12,3 +12,4 @@ export * from "./TrafficWidget";
 export * from "@/lib/store/moodStore";
 export * from "@/lib/recommendations/engine";
 export * from "./BreathingGuide";
+export * from "./MoodTrendChart";

@@ -12,10 +12,12 @@ export interface ToggleProps
  * Toggle
  * Simple accessible switch using checkbox under the hood.
  */
-export function Toggle({ id, label, defaultChecked, ...rest }: ToggleProps) {
+export function Toggle({ id, label, defaultChecked, checked: controlledChecked, onChange, ...rest }: ToggleProps) {
   const internalId = useId();
   const controlId = id ?? internalId;
-  const [checked, setChecked] = useState(!!defaultChecked);
+  const [uncontrolled, setUncontrolled] = useState(!!defaultChecked);
+  const isControlled = typeof controlledChecked === "boolean";
+  const checked = isControlled ? controlledChecked : uncontrolled;
 
   return (
     <label htmlFor={controlId} className="cc-toggle">
@@ -39,7 +41,10 @@ export function Toggle({ id, label, defaultChecked, ...rest }: ToggleProps) {
         type="checkbox"
         className="sr-only"
         checked={checked}
-        onChange={(e) => setChecked(e.target.checked)}
+        onChange={(e) => {
+          if (!isControlled) setUncontrolled(e.target.checked);
+          onChange?.(e);
+        }}
         {...rest}
       />
     </label>

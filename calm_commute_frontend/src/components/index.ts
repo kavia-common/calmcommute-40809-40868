@@ -8,3 +8,4 @@ export * from "./ui/Toggle";
 export * from "./ui/Badge";
 export * from "@/lib/publicConfig";
 export * from "./ConnectMusicCard";
+export * from "./TrafficWidget";

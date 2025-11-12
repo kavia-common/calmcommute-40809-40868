@@ -1,25 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { useMood } from "@/lib/store/moodStore";
 
 /**
  * PUBLIC_INTERFACE
  * MoodCheckinCard
- * A quick mood check-in component with a few selectable moods and a note field.
- * This is a local state placeholder; real submission should post to backend later.
+ * A quick mood check-in component with selectable moods and a note field.
+ * Saves entries to the client store (localStorage-backed) and exposes last mood info.
  */
 export function MoodCheckinCard() {
   const [mood, setMood] = useState<string | null>(null);
   const [note, setNote] = useState("");
+  const { addCheckin, getLastMood } = useMood();
 
   const moods = [
     { key: "Calm", color: "blue" },
     { key: "Okay", color: "amber" },
     { key: "Tense", color: "red" },
   ];
+
+  const last = getLastMood();
+  const lastTone = useMemo(() => {
+    if (!last) return undefined;
+    return last.mood === "Calm" ? "blue" : last.mood === "Okay" ? "amber" : "red";
+  }, [last]);
+
+  const handleSave = async () => {
+    if (!mood) return;
+    await addCheckin(mood, note || undefined);
+    setMood(null);
+    setNote("");
+  };
+
+  const handleClearLocal = () => {
+    setMood(null);
+    setNote("");
+  };
 
   return (
     <Card className="cc-card-hover">
@@ -28,9 +48,9 @@ export function MoodCheckinCard() {
           <h2 className="text-lg font-semibold">How are you feeling?</h2>
           <p className="text-sm text-slate-600">Quick check-in before you drive.</p>
         </div>
-        {mood && (
-          <Badge tone={mood === "Calm" ? "blue" : mood === "Okay" ? "amber" : "red"}>
-            Mood: {mood}
+        {last && (
+          <Badge tone={(lastTone as "blue" | "amber" | "red" | undefined)}>
+            Last: {new Date(last.timestamp).toLocaleString()} • {last.mood}
           </Badge>
         )}
       </div>
@@ -42,9 +62,7 @@ export function MoodCheckinCard() {
             <button
               key={m.key}
               onClick={() => setMood(m.key)}
-              className={`cc-btn ${
-                active ? "cc-btn-primary" : "cc-btn-secondary"
-              }`}
+              className={`cc-btn ${active ? "cc-btn-primary" : "cc-btn-secondary"}`}
               aria-pressed={active}
             >
               {m.key}
@@ -67,10 +85,10 @@ export function MoodCheckinCard() {
       </div>
 
       <div className="mt-4 flex gap-2">
-        <Button variant="primary" onClick={() => alert("Check-in saved (placeholder)")}>
+        <Button variant="primary" onClick={handleSave} aria-disabled={!mood} disabled={!mood}>
           Save Check-in
         </Button>
-        <Button variant="ghost" onClick={() => { setMood(null); setNote(""); }}>
+        <Button variant="ghost" onClick={handleClearLocal}>
           Clear
         </Button>
       </div>

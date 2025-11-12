@@ -2,24 +2,28 @@
 
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { getPublicConfig } from "@/lib/publicConfig";
 
 /**
  * PUBLIC_INTERFACE
  * RecommendationsPanel
  * Shows recommended content like music, podcasts, or breathing exercises.
  * Placeholder items; wire integrations later.
+ * Displays configured API endpoints in info/debug logging for easier debugging.
  */
 export function RecommendationsPanel() {
+  const cfg = getPublicConfig();
+
   const items = [
     {
       id: "rec-1",
-      title: "5‑min Guided Breathing",
+      title: "5\u2011min Guided Breathing",
       meta: "Breathing • Beginner",
       cta: "Start",
     },
     {
       id: "rec-2",
-      title: "Lo‑Fi Commute Beats",
+      title: "Lo\u2011Fi Commute Beats",
       meta: "Spotify • 25 min",
       cta: "Play",
     },
@@ -61,6 +65,11 @@ export function RecommendationsPanel() {
           </div>
         ))}
       </div>
+      {(cfg.LOG_LEVEL === "debug" || cfg.LOG_LEVEL === "info") && (
+        <div className="text-xs text-gray-500 mt-3">
+          Using API: {cfg.API_BASE || "not configured"} | WS: {cfg.WS_URL || "not configured"}
+        </div>
+      )}
     </Card>
   );
 }

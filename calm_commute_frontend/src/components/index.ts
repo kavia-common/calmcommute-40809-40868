@@ -11,3 +11,4 @@ export * from "./ConnectMusicCard";
 export * from "./TrafficWidget";
 export * from "@/lib/store/moodStore";
 export * from "@/lib/recommendations/engine";
+export * from "./BreathingGuide";

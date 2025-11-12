@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { getPublicConfig } from "@/lib/publicConfig";
@@ -18,7 +18,6 @@ import { useMood } from "@/lib/store/moodStore";
 export function RecommendationsPanel() {
   const cfg = getPublicConfig();
   const { getLastMood } = useMood();
-  const [refreshIndex, setRefreshIndex] = useState(0);
 
   const lastMood = getLastMood();
 
@@ -54,11 +53,10 @@ export function RecommendationsPanel() {
         },
       ];
     }
-  }, [lastMood, refreshIndex]);
+  }, [lastMood]);
 
   const onRefresh = () => {
-    // Allow minute-based traffic changes to trigger recompute
-    setRefreshIndex((i) => i + 1);
+    // Placeholder: In a future iteration, re-fetch traffic/mood or invalidate cache.
   };
 
   const onStartBreathing = (item: SuggestionItem) => {

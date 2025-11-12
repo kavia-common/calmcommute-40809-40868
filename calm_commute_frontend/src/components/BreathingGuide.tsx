@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "./ui/utils";
+import { track } from "@/lib/analytics/client";
 
 /**
  * PUBLIC_INTERFACE
@@ -173,7 +174,9 @@ export const BreathingGuide: React.FC<BreathingGuideProps> = ({
     lastTickRef.current = 0;
     setShowSummary(false);
     setRunning(true);
-  }, [phases, running]);
+    // Fire analytics (non-blocking)
+    track("breathing_started", { pattern: preset.name === "Box" ? "box" : "478", durationSec: sessionMinutes * 60 });
+  }, [phases, running, preset.name, sessionMinutes]);
 
   const stop = useCallback(() => {
     setRunning(false);

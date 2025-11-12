@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "./ui/Button";
 import { Card } from "./ui/Card";
 import { getPublicConfig, isFeatureEnabled } from "../lib/publicConfig";
+import { track } from "@/lib/analytics/client";
 
 /**
  * Displays a card allowing users to connect their preferred music provider.
@@ -32,11 +33,14 @@ export function ConnectMusicCard({ className }: ConnectMusicCardProps) {
     return null;
   }
 
-  const onConnect = (provider: Provider) => {
+  const onConnect = async (provider: Provider) => {
+    // Analytics
+    await track("provider_connect_clicked", {
+      provider: provider === "apple" ? "appleMusic" : "spotify",
+      location: "dashboard",
+    });
+
     if (provider === "spotify") {
-      // Kick off client-side OAuth dance via backend redirect
-      // We will call our frontend stub which uses NEXT_PUBLIC_BACKEND_URL for redirect.
-      // This will navigate the user to the provider auth page.
       import("../lib/integrations/spotify")
         .then((m) => m.beginSpotifyConnect())
         .catch((e) => {

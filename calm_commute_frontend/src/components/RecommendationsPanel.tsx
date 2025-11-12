@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { getPublicConfig } from "@/lib/publicConfig";
 import { getSuggestions, getTrafficSnapshot, type SuggestionItem } from "@/lib/recommendations/engine";
 import { useMood } from "@/lib/store/moodStore";
+import { track } from "@/lib/analytics/client";
 
 /**
  * PUBLIC_INTERFACE
@@ -59,15 +60,30 @@ export function RecommendationsPanel() {
     // Placeholder: In a future iteration, re-fetch traffic/mood or invalidate cache.
   };
 
-  const onStartBreathing = (item: SuggestionItem) => {
+  const onStartBreathing = async (item: SuggestionItem) => {
+    await track("recommendation_play_clicked", {
+      id: item.id,
+      type: "breathing",
+      source: "internal",
+    });
     alert(`Starting ${item.title}. Breathe in for 4, hold 4, out for 6. Repeat.`);
   };
 
-  const onPlay = (item: SuggestionItem) => {
+  const onPlay = async (item: SuggestionItem) => {
+    await track("recommendation_play_clicked", {
+      id: item.id,
+      type: "music",
+      source: "internal",
+    });
     alert(`Play request for "${item.title}" (stub). Connect Spotify/Apple Music to enable playback.`);
   };
 
-  const onListen = (item: SuggestionItem) => {
+  const onListen = async (item: SuggestionItem) => {
+    await track("recommendation_play_clicked", {
+      id: item.id,
+      type: "podcast",
+      source: "internal",
+    });
     alert(`Listen to "${item.title}" (stub).`);
   };
 

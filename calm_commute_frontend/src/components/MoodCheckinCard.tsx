@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { useMood } from "@/lib/store/moodStore";
+import { track } from "@/lib/analytics/client";
 
 /**
  * PUBLIC_INTERFACE
@@ -32,6 +33,12 @@ export function MoodCheckinCard() {
   const handleSave = async () => {
     if (!mood) return;
     await addCheckin(mood, note || undefined);
+    // Analytics: normalize to our analytics mood schema
+    const normalized = mood === "Tense" ? "stressed" : mood === "Calm" ? "calm" : "neutral";
+    await track("mood_checkin_submitted", {
+      mood: normalized,
+      noteLength: note?.length ?? 0,
+    });
     setMood(null);
     setNote("");
   };

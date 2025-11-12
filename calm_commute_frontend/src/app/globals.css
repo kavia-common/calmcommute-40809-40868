@@ -1,26 +1,187 @@
 @import "tailwindcss";
 
+/* Ocean Professional Theme Tokens */
 :root {
-  --color-primary: #000000;
-  --color-secondary: #FFFFFF;
-  --color-accent: #3B82F6;
-  --color-background: #FFFFFF;
-}
+  --ocean-primary: #2563eb; /* blue-600 */
+  --ocean-primary-500: #3b82f6; /* blue-500 */
+  --ocean-secondary: #f59e0b; /* amber-500 */
+  --ocean-error: #ef4444; /* red-500 */
+  --ocean-bg: #f9fafb; /* gray-50 */
+  --ocean-surface: #ffffff; /* white */
+  --ocean-text: #111827; /* gray-900 */
+  --ocean-muted: #6b7280; /* gray-500 */
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 12px rgb(2 6 23 / 0.08);
+  --shadow-lg: 0 12px 24px rgb(2 6 23 / 0.12);
 }
 
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  background-color: var(--color-background);
-  color: var(--color-primary);
+  background: var(--ocean-bg);
+  color: var(--ocean-text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
-body {
-  font-family: system-ui, -apple-system, sans-serif;
+/* Utilities */
+.container {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/* Themed backgrounds */
+.bg-ocean-bg {
+  background: var(--ocean-bg);
+}
+.bg-ocean-surface {
+  background: var(--ocean-surface);
+}
+
+/* Gradients */
+.ocean-surface-gradient {
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(59 130 246 / 0.08),
+    rgb(249 250 251)
+  );
+}
+
+/* Cards */
+.cc-card {
+  background: var(--ocean-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgb(229 231 235 / 1);
+}
+
+.cc-card-hover {
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+.cc-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgb(203 213 225 / 1);
+}
+
+/* Buttons */
+.cc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-md);
+  padding: 0.625rem 0.9rem;
+  font-weight: 600;
+  transition: background-color 150ms ease, color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+.cc-btn-primary {
+  background: var(--ocean-primary);
+  color: white;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
+}
+.cc-btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+.cc-btn-secondary {
+  background: #fff7ed;
+  color: #9a3412;
+  border: 1px solid #fed7aa;
+}
+.cc-btn-secondary:hover {
+  background: #ffedd5;
+}
+.cc-btn-ghost {
+  background: transparent;
+  color: var(--ocean-text);
+}
+.cc-btn-ghost:hover {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+/* Badges */
+.cc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid rgb(229 231 235 / 1);
+  background: white;
+  color: var(--ocean-text);
+}
+.cc-badge-blue {
+  color: #1e3a8a;
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+.cc-badge-amber {
+  color: #78350f;
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+.cc-badge-red {
+  color: #991b1b;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+/* Toggles */
+.cc-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+/* Links */
+a {
+  color: var(--ocean-primary-500);
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Transitions for layout */
+.page-enter {
+  animation: pageIn 240ms ease;
+}
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

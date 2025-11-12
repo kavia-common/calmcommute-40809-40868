@@ -1,45 +1,91 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { getPublicConfig } from "@/lib/publicConfig";
+import { getSuggestions, getTrafficSnapshot, type SuggestionItem } from "@/lib/recommendations/engine";
+import { useMood } from "@/lib/store/moodStore";
 
 /**
  * PUBLIC_INTERFACE
  * RecommendationsPanel
  * Shows recommended content like music, podcasts, or breathing exercises.
- * Placeholder items; wire integrations later.
+ * Uses a deterministic suggestions engine that combines current mood and traffic data.
+ * Gracefully falls back to static items if data is unavailable.
  * Displays configured API endpoints in info/debug logging for easier debugging.
  */
 export function RecommendationsPanel() {
   const cfg = getPublicConfig();
+  const { getLastMood } = useMood();
+  const [refreshIndex, setRefreshIndex] = useState(0);
 
-  const items = [
-    {
-      id: "rec-1",
-      title: "5\u2011min Guided Breathing",
-      meta: "Breathing • Beginner",
-      cta: "Start",
-    },
-    {
-      id: "rec-2",
-      title: "Lo\u2011Fi Commute Beats",
-      meta: "Spotify • 25 min",
-      cta: "Play",
-    },
-    {
-      id: "rec-3",
-      title: "Mindful Moments",
-      meta: "Podcast • 12 min",
-      cta: "Listen",
-    },
-  ];
+  const lastMood = getLastMood();
+
+  const items: SuggestionItem[] = useMemo(() => {
+    try {
+      const traffic = getTrafficSnapshot("home", "work");
+      const computed = getSuggestions({ lastMood, traffic });
+      if (!computed || computed.length === 0) throw new Error("empty");
+      return computed;
+    } catch {
+      // Fallback: prior placeholder content
+      return [
+        {
+          id: "rec-1",
+          type: "breathing",
+          title: "5\u2011min Guided Breathing",
+          meta: "Breathing \u2022 Beginner",
+          cta: "Start",
+        },
+        {
+          id: "rec-2",
+          type: "music",
+          title: "Lo\u2011Fi Commute Beats",
+          meta: "Spotify \u2022 25 min",
+          cta: "Play",
+        },
+        {
+          id: "rec-3",
+          type: "podcast",
+          title: "Mindful Moments",
+          meta: "Podcast \u2022 12 min",
+          cta: "Listen",
+        },
+      ];
+    }
+  }, [lastMood, refreshIndex]);
+
+  const onRefresh = () => {
+    // Allow minute-based traffic changes to trigger recompute
+    setRefreshIndex((i) => i + 1);
+  };
+
+  const onStartBreathing = (item: SuggestionItem) => {
+    alert(`Starting ${item.title}. Breathe in for 4, hold 4, out for 6. Repeat.`);
+  };
+
+  const onPlay = (item: SuggestionItem) => {
+    alert(`Play request for "${item.title}" (stub). Connect Spotify/Apple Music to enable playback.`);
+  };
+
+  const onListen = (item: SuggestionItem) => {
+    alert(`Listen to "${item.title}" (stub).`);
+  };
+
+  const handleAction = (it: SuggestionItem) => {
+    if (it.type === "breathing") return onStartBreathing(it);
+    if (it.type === "music") return onPlay(it);
+    return onListen(it);
+  };
 
   return (
     <Card className="cc-card-hover">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-lg font-semibold">Recommendations</h2>
-        <Button variant="ghost">Refresh</Button>
+        <Button variant="ghost" onClick={onRefresh} aria-label="Refresh recommendations">
+          Refresh
+        </Button>
       </div>
       <div className="grid md:grid-cols-3 gap-4">
         {items.map((it) => (
@@ -56,7 +102,7 @@ export function RecommendationsPanel() {
             <div className="mt-3">
               <Button
                 variant="primary"
-                onClick={() => alert(`${it.cta} (placeholder)`)}
+                onClick={() => handleAction(it)}
                 aria-label={`${it.cta} ${it.title}`}
               >
                 {it.cta}
